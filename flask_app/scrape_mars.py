@@ -1,4 +1,4 @@
-# Import Beautiful Soup
+# Import Dependencies
 from bs4 import BeautifulSoup
 from splinter import Browser
 import pandas as pd
@@ -64,45 +64,47 @@ def featured_image(browser):
 
 
 def twitter_weather(browser):
-    url='https://twitter.com/marswxreport?lang=en'
+    url = 'https://twitter.com/marswxreport?lang=en'
     browser.visit(url)
-
+    
     html = browser.html
     weather_soup = BeautifulSoup(html, 'html.parser')
-
-    mars_weather_tweet = weather_soup.find('div', attrs= {'class':'tweet', 'data-name':'Mars Weather'})
-
+    mars_weather_tweet = weather_soup.find('div', 
+                                       attrs={
+                                           "class": "tweet", 
+                                            "data-name": "Mars Weather"
+                                        })
+    # Next search within the tweet for p tag containing the tweet text
     mars_weather = mars_weather_tweet.find('p', 'tweet-text').get_text()
-    
     return mars_weather
 
 
 def hemisphere(browser):
     url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
     browser.visit(url)
-
     hemisphere_image_urls = []
 
+    # First get a list og all the hemisphers
     links = browser.find_by_css('a.product-item h3')
     for item in range(len(links)):
         hemisphere = {}
         
-    # Need to find the element on each loop to avoid a stale element exception
+        # We have to find the element on each loop to avoid a stale element exception
         browser.find_by_css('a.product-item h3')[item].click()
         
-    # Find the sample image anchor tag and extract the href
+        # Next we find the Sample Image anchor tage and extract the href
         sample_element = browser.find_link_by_text('Sample').first
         hemisphere['img_url'] = sample_element['href']
         
-    # Get hemisher title
+        
+        # Get Hemispher title 
         hemisphere['title'] = browser.find_by_css('h2.title').text
         
-    # Append hemispher object to list
+        #Append hemispher object to list
         hemisphere_image_urls.append(hemisphere)
-
-    # Navigate backwards in the web page
+        
+        # Finally, we navigate backwards
         browser.back()
-    
     return hemisphere_image_urls
 
 
