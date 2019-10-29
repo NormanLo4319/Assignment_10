@@ -4,7 +4,6 @@ from splinter import Browser
 import pandas as pd
 import datetime as dt
 
-
 # Define function to scrap Mars news on NASA web page
 def mars_news(browser):
     url = 'https://mars.nasa.gov/news/'
@@ -32,7 +31,6 @@ def mars_news(browser):
         return None, None
 
     return news_title, news_paragraph
-
 
 
 def featured_image(browser):
@@ -124,7 +122,6 @@ def scrape_hemisphere(html_text):
         return hemisphere
 
 
-
 def mars_facts():
     try: 
     
@@ -135,7 +132,6 @@ def mars_facts():
     df.set_index('description', inplace=True)
     
     return df.to_html(classes='table table-striped')
-
 
 
 def scrape_all():
@@ -160,8 +156,6 @@ def scrape_all():
         'fact': facts,
         'last_modified': timestamp
     }
-
-
 
     browser.quit()
 
